@@ -35,52 +35,55 @@ class Communicator(drm4g.communicators.Communicator):
     """
     Create a SSH session to remote resources.
     """
-    _lock       = __import__('threading').Lock()
-    _sem        = __import__('threading').Semaphore(SFTP_CONNECTIONS)
-    _conn      = None
+    _lock = __import__('threading').Lock()
+    _sem = __import__('threading').Semaphore(SFTP_CONNECTIONS)
+    _conn = None
 
     def connect(self):
         with self._lock:
             if not self.is_connected():
-                logger.debug("Opening ssh connection ... ")
-                logger.debug("Trying '%s' key ... " % self.private_key )
-                private_key_path = expanduser(self.private_key)
-                if (
-                        (not exists( private_key_path)) and
-                        ('PRIVATE KEY' not in self.private_key)
-                ):
-                    output = "'%s'key does not exist" % private_key_path
-                    raise ComException(output)
-                logger.debug(
-                    "Connecting to '%s' as user '%s' port  '%s' ..."
-                    % ( self.frontend, self.username, self.port )
-                )
-                if ':' in self.frontend :
-                    self.frontend, self.port = self.frontend.split( ':' )
-                try:
-                    self._conn = fabric.Connection(
-                        host=self.frontend,
-                        user=self.username,
-                        connect_kwargs={
-                            "key_filename": private_key_path,
-                        },
-                        connect_timeout=10000
-                    )
-                except Exception as err:
-                    logger.warning(
-                        "Error connecting '%s': %s" %
-                        (self.frontend, str(err))
-                    )
-                if not self.is_connected():
-                    output = (
-                        "Authentication failed for '%s'. Try to execute "
-                        "`ssh -vvv -p %d %s@%s` and see the response." %
-                             (
-                                 self.frontend, self.port, self.username,
-                                 self.frontend
-                             )
-                    )
-                    raise ComException(output)
+                self._connect()
+
+    def _connect(self):
+        logger.debug("Opening ssh connection ... ")
+        logger.debug("Trying '%s' key ... " % self.private_key )
+        private_key_path = expanduser(self.private_key)
+        if (
+                (not exists( private_key_path)) and
+                ('PRIVATE KEY' not in self.private_key)
+        ):
+            output = "'%s'key does not exist" % private_key_path
+            raise ComException(output)
+        logger.debug(
+            "Connecting to '%s' as user '%s' port  '%s' ..."
+            % ( self.frontend, self.username, self.port )
+        )
+        if ':' in self.frontend:
+            self.frontend, self.port = self.frontend.split( ':' )
+        try:
+            self._conn = fabric.Connection(
+                host=self.frontend,
+                user=self.username,
+                connect_kwargs={
+                    "key_filename": private_key_path,
+                },
+                connect_timeout=10000
+            )
+        except Exception as err:
+            logger.warning(
+                "Error connecting '%s': %s" %
+                (self.frontend, str(err))
+            )
+        if not self.is_connected():
+            output = (
+                "Authentication failed for '%s'. Try to execute "
+                "`ssh -vvv -p %d %s@%s` and see the response." %
+                     (
+                         self.frontend, self.port, self.username,
+                         self.frontend
+                     )
+            )
+            raise ComException(output)
 
     @property
     def is_connected(self):
@@ -114,18 +117,18 @@ class Communicator(drm4g.communicators.Communicator):
             self.connect()
             if 'file://' in source_url:
                 from_dir = urlparse(source_url).path
-                to_dir = self._set_dir(urlparse( destination_url).path)
-                self._conn.put(from_dir, to_dir )
+                to_dir = self._set_dir(urlparse(destination_url).path)
+                self._conn.put(from_dir, to_dir)
                 if execution_mode == 'X':
                     stdout, stderr = self.execCommand("chmod +x %s" % to_dir)
             else:
-                from_dir = self._set_dir( urlparse(source_url).path)
+                from_dir = self._set_dir(urlparse(source_url).path)
                 to_dir = urlparse(destination_url).path
                 logger.warning("%s , %s" % (from_dir, to_dir))
                 self._conn.get(from_dir, to_dir)
 
     def close(self):
-        try :
+        try:
             if self.is_connected:
                 self._conn.close()
         except Exception as err:
@@ -142,5 +145,5 @@ class Communicator(drm4g.communicators.Communicator):
         work_directory = re.compile(r'^~').sub(self.work_directory, path)
         if work_directory[0] == r'~':
             return ".%s" % work_directory[1:]
-        else :
+        else:
             return work_directory
