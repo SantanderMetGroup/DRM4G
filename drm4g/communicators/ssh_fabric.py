@@ -41,7 +41,7 @@ class Communicator(drm4g.communicators.Communicator):
 
     def connect(self):
         with self._lock:
-            if not self.is_connected():
+            if not self.is_connected:
                 self._connect()
 
     def _connect(self):
@@ -66,35 +66,24 @@ class Communicator(drm4g.communicators.Communicator):
                 user=self.username,
                 connect_kwargs={
                     "key_filename": private_key_path,
-                },
-                connect_timeout=10000
+                }
             )
         except Exception as err:
             logger.warning(
                 "Error connecting '%s': %s" %
                 (self.frontend, str(err))
             )
-        if not self.is_connected():
-            output = (
-                "Authentication failed for '%s'. Try to execute "
-                "`ssh -vvv -p %d %s@%s` and see the response." %
-                     (
-                         self.frontend, self.port, self.username,
-                         self.frontend
-                     )
-            )
-            raise ComException(output)
 
     @property
     def is_connected(self):
         if self._conn is None:
             return False
         else:
-            return self._conn.is_connected()
+            return self._conn.is_connected
 
     def execCommand(self, command, input=None):
+        self.connect()
         with self._lock:
-            self.connect()
             result = self._conn.run(command)
             stdout = result.stdout
             stderr = result.stderr
@@ -118,14 +107,16 @@ class Communicator(drm4g.communicators.Communicator):
             if 'file://' in source_url:
                 from_dir = urlparse(source_url).path
                 to_dir = self._set_dir(urlparse(destination_url).path)
-                self._conn.put(from_dir, to_dir)
+                with self._lock:
+                    self._conn.put(from_dir, to_dir)
                 if execution_mode == 'X':
                     stdout, stderr = self.execCommand("chmod +x %s" % to_dir)
             else:
                 from_dir = self._set_dir(urlparse(source_url).path)
                 to_dir = urlparse(destination_url).path
                 logger.warning("%s , %s" % (from_dir, to_dir))
-                self._conn.get(from_dir, to_dir)
+                with self._lock:
+                    self._conn.get(from_dir, to_dir)
 
     def close(self):
         try:
