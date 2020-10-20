@@ -66,7 +66,8 @@ class Communicator(drm4g.communicators.Communicator):
                 user=self.username,
                 connect_kwargs={
                     "key_filename": private_key_path,
-                }
+                },
+                connect_timeout=300
             )
         except Exception as err:
             logger.warning(
