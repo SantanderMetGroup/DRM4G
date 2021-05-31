@@ -22,11 +22,14 @@ import os
 import pickle
 import logging
 from drm4g.utils.importlib import import_module
-from drm4g                 import ( DRM4G_CONFIG_FILE,
-                                    COMMUNICATORS,
-                                    RESOURCE_MANAGERS,
-                                    REMOTE_JOBS_DIR,
-                                    DRM4G_DIR )
+from drm4g.communicators   import REMOTE_JOBS_DIR
+from drm4g                 import ( 
+                                  DRM4G_DIR,
+                                  DRM4G_CONFIG_FILE,
+                                  COMMUNICATORS,
+                                  RESOURCE_MANAGERS,
+                                  )
+
 try :
     import configparser
 except ImportError :

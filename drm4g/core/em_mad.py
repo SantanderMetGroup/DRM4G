@@ -23,7 +23,7 @@ import time
 import threading
 import logging
 from os.path                 import join, dirname
-from drm4g                   import REMOTE_JOBS_DIR
+from drm4g.communicators     import REMOTE_JOBS_DIR
 from drm4g.utils.rsl2        import Rsl2Parser
 from drm4g.utils.list        import List
 from drm4g.core.configure    import Configuration

@@ -32,8 +32,8 @@ import subprocess
 import drm4g.communicators
 import drm4g.commands
 from drm4g.commands         import Agent
-from drm4g.communicators    import logger
-from drm4g                  import SFTP_CONNECTIONS, SSH_CONNECT_TIMEOUT, DRM4G_DIR
+from drm4g.communicators    import logger, SSH_CONNECT_TIMEOUT, SFTP_CONNECTIONS
+from drm4g                  import DRM4G_DIR
 from drm4g.utils.url        import urlparse
 from openssh_wrapper import SSHConnection
 
