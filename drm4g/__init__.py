@@ -20,32 +20,35 @@
 
 __all__ = ["communicators", "core", "managers", "utils", "commands", "api"]
 
-__version__  = '2.6.13'
-__author__   = 'Antonio S. Cofino, Markel Garcia, Carlos Blanco and Antonio Minondo'
+__version__  = '2.6.15'
+__author__   = 'Valvanuz Fernández-Quiruelas, Markel Garcia, Carlos Blanco, Antonio Minondo and Antonio S. Cofino (@cofinoa)'
 
 import sys
 import os
 import logging.config
 import logging
-from os.path import dirname , join , expandvars , exists , abspath
+from os.path import dirname , join , expanduser , exists , abspath
 
 if (sys.version_info[0]==2 and sys.version_info<=(2,5)) or (sys.version_info[0]==3 and sys.version_info<(3,3)):
     exit( 'The version number of Python has to be >= 2.6 or >= 3.3' )
 
-########################################
-# Default values used in DRM4G package.#
-########################################
-HOME              = os.environ.get( 'HOME' )
-DRM4G_DIR         = os.environ[ 'GW_LOCATION' ] = os.environ.get("DRM4G_DIR", "%s/.drm4g" %(HOME))
-DRM4G_CONFIG_FILE = join( DRM4G_DIR , 'etc' , 'resources.conf' )
-DRM4G_LOGGER      = os.environ.get( 'LOGGER',  join( DRM4G_DIR , 'etc' , 'logger.conf') )
-DRM4G_DAEMON      = join( DRM4G_DIR , 'etc' , 'gwd.conf')
-DRM4G_SCHED       = join( DRM4G_DIR , 'etc' , 'sched.conf')
+##############################################
+# Default values used in DRM4G ENV variables #
+##############################################
+HOME                 = expanduser(os.environ.get( '~' ))
+DRM4G_DIR            = expanduser(os.environ.get( 'DRM4G_DIR'           , join( HOME     , '.drm4g' )))
+DRM4G_RESOURCES_CONF = expanduser(os.environ.get( 'DRM4G_RESOURCES_CONF', join( DRM4G_DIR, 'etc', 'resources.conf' )))
+DRM4G_LOGGER_CONF    = expanduser(os.environ.get( 'DRM4G_LOGGER_CONF'   , join( DRM4G_DIR, 'etc', 'logger.conf')))
+DRM4G_GWD_CONF       = expanduser(os.environ.get( 'DRM4G_GWD_CONF'      , join( DRM4G_DIR, 'etc', 'gwd.conf')))
+DRM4G_SCHED_CONF     = expanduser(os.environ.get( 'DRM4G_SCHED_CONF'    , join( DRM4G_DIR, 'etc', 'sched.conf')))
+
+#ENV variable shouldn't be used outside of GWD and its components. 
+os.environ[ 'GW_LOCATION' ] = DRM4G_DIR
 
 ##
 # Configure logger
 ##
-logging.config.fileConfig(DRM4G_LOGGER, {"DRM4G_DIR": DRM4G_DIR})
+logging.config.fileConfig(DRM4G_LOGGER_CONF, {"DRM4G_DIR": DRM4G_DIR})
 logger = logging.getLogger('console')
 
 if exists( DRM4G_DIR ) is False  :
@@ -71,25 +74,25 @@ SFTP_CONNECTIONS    = 3
 PROXY_THRESHOLD     = 178 # Proxy threshold in hours.
 
 COMMUNICATORS = {
-    "ssh": "drm4g.communicators.ssh",
-    "ssh_fabric": "drm4g.communicators.ssh_fabric",
-    "pk_ssh": "drm4g.communicators.ssh",
-    "op_ssh": "drm4g.communicators.openssh",
-    "local": "drm4g.communicators.local",
+    "ssh"          : "drm4g.communicators.ssh",
+    "ssh_fabric"   : "drm4g.communicators.ssh_fabric",
+    "pk_ssh"       : "drm4g.communicators.ssh",
+    "op_ssh"       : "drm4g.communicators.openssh",
+    "local"        : "drm4g.communicators.local",
 }
 RESOURCE_MANAGERS = {
-                     "pbs"          : "drm4g.managers.pbs",
-                     "sge"          : "drm4g.managers.sge",
-                     "fork"         : "drm4g.managers.fork",
-                     "none"         : "drm4g.managers.fork",
-                     "lsf"          : "drm4g.managers.lsf",
-                     "loadleveler"  : "drm4g.managers.loadleveler",
-                     "cream"        : "drm4g.managers.cream",
-                     "slurm"        : "drm4g.managers.slurm",
-                     "mnslurm"      : "drm4g.managers.marenostrum",
-                     "slurm_res"    : "drm4g.managers.slurm_res",
-                     "neptuno"      : "drm4g.managers.neptuno",
-                     #"rocci"        : "drm4g.managers.rocci",
-                     }
+    "pbs"          : "drm4g.managers.pbs",
+    "sge"          : "drm4g.managers.sge",
+    "fork"         : "drm4g.managers.fork",
+    "none"         : "drm4g.managers.fork",
+    "lsf"          : "drm4g.managers.lsf",
+    "loadleveler"  : "drm4g.managers.loadleveler",
+    "cream"        : "drm4g.managers.cream",
+    "slurm"        : "drm4g.managers.slurm",
+    "mnslurm"      : "drm4g.managers.marenostrum",
+    "slurm_res"    : "drm4g.managers.slurm_res",
+    "neptuno"      : "drm4g.managers.neptuno",
+    #"rocci"        : "drm4g.managers.rocci",
+}
 
 

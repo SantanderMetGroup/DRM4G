@@ -29,14 +29,14 @@ Options:
 """
 
 import os
-from drm4g  import DRM4G_DAEMON, DRM4G_LOGGER, DRM4G_SCHED, logger
+from drm4g  import DRM4G_GWD_CONF, DRM4G_LOGGER_CONF, DRM4G_SCHED_CONF, logger
 
 def run( arg ) :
     if arg[ 'daemon' ] :
-        conf_file = DRM4G_DAEMON
+        conf_file = DRM4G_GWD_CONF
     elif arg[ 'logger' ]:
-        conf_file = DRM4G_LOGGER
+        conf_file = DRM4G_LOGGER_CONF
     else :
-        conf_file = DRM4G_SCHED
+        conf_file = DRM4G_SCHED_CONF
     logger.debug( "Editing '%s' file" % conf_file )
     os.system( "%s %s" % ( os.environ.get('EDITOR', 'nano') , conf_file ) )
