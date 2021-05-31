@@ -30,10 +30,6 @@ def main():
             usage = 'Usage: %prog')
     options, args = parser.parse_args()
     try:
-        try:
-            logging.config.fileConfig(DRM4G_LOGGER, {"DRM4G_DIR": DRM4G_DIR})
-        except :
-            pass
         GwEmMad().processLine()
     except KeyboardInterrupt as e:
         sys.exit(-1)
