@@ -90,7 +90,7 @@ class Resource (object):
             queue.MaxRunningJobs = max_jobs_running
             queue.MaxJobsInQueue = max_jobs_in_queue
             host_info.addQueue( self.additional_queue_properties( queue ) )
-        host_info.addQueue( Queue() )
+ #       host_info.addQueue( Queue() )
         host_info.LrmsName = self.features[ 'lrms' ]
         host_info.LrmsType = self.features[ 'lrms' ]
         return host_info.info()

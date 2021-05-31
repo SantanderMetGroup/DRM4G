@@ -135,7 +135,7 @@ class GwEmMad (object):
             out = 'SUBMIT %s FAILURE %s' % ( JID, str( err ) )
             self.logger.error( err , exc_info=1 )
         self.message.stdout(out)
-        self.logger.debug(out, exc_info=1 )
+        self.logger.debug(out)
 
     def do_FINALIZE(self, args):
         """
@@ -187,7 +187,7 @@ class GwEmMad (object):
             out = 'RECOVER %s FAILURE %s' % ( JID, str( err ) )
             self.logger.error( err , exc_info=1 )
         self.message.stdout( out )
-        self.logger.debug( out, exc_info=1 )
+        self.logger.debug( out )
 
     def do_CALLBACK(self):
         """

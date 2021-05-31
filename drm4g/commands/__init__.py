@@ -29,7 +29,7 @@ import logging
 import subprocess
 import datetime
 
-from drm4g             import REMOTE_VOS_DIR, DRM4G_CONFIG_FILE, DRM4G_DIR
+from drm4g             import REMOTE_VOS_DIR, DRM4G_CONFIG_FILE, DRM4G_DIR,logger
 #from drm4g.managers    import rocci
 from drm4g.core.im_mad import GwImMad
 from os.path           import expanduser, join, dirname, exists, basename, expandvars
@@ -37,8 +37,6 @@ from os.path           import expanduser, join, dirname, exists, basename, expan
 
 PY2 = sys.version_info[0] == 2
 
-logging.basicConfig( format='%(message)s', level = logging.INFO , stream = sys.stdout )
-logger = logging.getLogger(__name__)
 
 def process_is_runnig( pid ):
     """

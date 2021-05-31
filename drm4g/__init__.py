@@ -20,12 +20,13 @@
 
 __all__ = ["communicators", "core", "managers", "utils", "commands", "api"]
 
-__version__  = '2.6.14'
-__author__   = 'Antonio S. Cofino, Markel Garcia, Carlos Blanco, Valvanuz Fernandez-Quiruelas and Antonio Minondo'
+__version__  = '2.6.13'
+__author__   = 'Antonio S. Cofino, Markel Garcia, Carlos Blanco and Antonio Minondo'
 
 import sys
 import os
 import logging.config
+import logging
 from os.path import dirname , join , expandvars , exists , abspath
 
 if (sys.version_info[0]==2 and sys.version_info<=(2,5)) or (sys.version_info[0]==3 and sys.version_info<(3,3)):
@@ -37,15 +38,15 @@ if (sys.version_info[0]==2 and sys.version_info<=(2,5)) or (sys.version_info[0]=
 HOME              = os.environ.get( 'HOME' )
 DRM4G_DIR         = os.environ[ 'GW_LOCATION' ] = os.environ.get("DRM4G_DIR", "%s/.drm4g" %(HOME))
 DRM4G_CONFIG_FILE = join( DRM4G_DIR , 'etc' , 'resources.conf' )
-DRM4G_LOGGER      = join( DRM4G_DIR , 'etc' , 'logger.conf')
+DRM4G_LOGGER      = os.environ.get( 'LOGGER',  join( DRM4G_DIR , 'etc' , 'logger.conf') )
 DRM4G_DAEMON      = join( DRM4G_DIR , 'etc' , 'gwd.conf')
 DRM4G_SCHED       = join( DRM4G_DIR , 'etc' , 'sched.conf')
 
 ##
 # Configure logger
 ##
-logging.basicConfig( format='%(message)s', level = logging.INFO , stream = sys.stdout )
-logger = logging.getLogger(__name__)
+logging.config.fileConfig(DRM4G_LOGGER, {"DRM4G_DIR": DRM4G_DIR})
+logger = logging.getLogger('console')
 
 if exists( DRM4G_DIR ) is False  :
     logger.info( "Creating a DRM4G local configuration in '%s'" %  DRM4G_DIR )
