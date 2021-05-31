@@ -27,8 +27,8 @@ Usage:
 Options:
    -d --debug    Debug mode.
 """
-
-from drm4g.commands       import Daemon, Agent, logger
+from drm4g                import logger
+from drm4g.commands       import Daemon, Agent
 
 def run( arg ) :
     try:
