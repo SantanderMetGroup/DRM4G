@@ -24,7 +24,6 @@ import os
 import subprocess
 import logging
 import pickle
-from drm4g                 import DRM4G_DIR
 
 
 logger = logging.getLogger(__name__)

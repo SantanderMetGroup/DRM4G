@@ -19,10 +19,9 @@
 # permissions and limitations under the Licence.
 #
 
-from drm4g             import DRM4G_LOGGER, DRM4G_DIR
 from drm4g.core.em_mad import GwEmMad
-from optparse import OptionParser
-import sys, traceback, logging
+from optparse import OptionParse
+import sys, traceback
 
 def main():
     parser = OptionParser(description = 'Execution manager MAD',

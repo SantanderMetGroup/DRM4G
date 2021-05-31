@@ -18,21 +18,19 @@
 # permissions and limitations under the Licence.
 #
 
-import cmd
 import os
 import sys
 import re
 import time
 import signal
 import getpass
-import logging
 import subprocess
 import datetime
 
 from drm4g             import REMOTE_VOS_DIR, DRM4G_CONFIG_FILE, DRM4G_DIR,logger
 #from drm4g.managers    import rocci
 from drm4g.core.im_mad import GwImMad
-from os.path           import expanduser, join, dirname, exists, basename, expandvars
+from os.path           import expanduser, join, dirname, exists, basename
 
 
 PY2 = sys.version_info[0] == 2
