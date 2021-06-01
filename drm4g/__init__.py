@@ -65,7 +65,7 @@ if exists( DRM4G_DIR ) is False  :
 # Configure logger
 ##
 logging.config.fileConfig(DRM4G_LOGGER_CONF, {"DRM4G_DIR": DRM4G_DIR})
-logger = logging.getLogger('console')
+console_logger = logging.getLogger('console')
 
 REMOTE_VOS_DIR  = join( DRM4G_DIR , 'security') #TODO: TO BE DEPRECATED
 

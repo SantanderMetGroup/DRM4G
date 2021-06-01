@@ -20,7 +20,7 @@
 #
 
 from drm4g.core.em_mad import GwEmMad
-from optparse import OptionParse
+from optparse import OptionParser
 import sys, traceback
 
 def main():

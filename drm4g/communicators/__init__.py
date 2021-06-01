@@ -20,6 +20,7 @@
 
 import logging
 from drm4g import DRM4G_DIR
+from os.path import join
 
 REMOTE_JOBS_DIR = join( DRM4G_DIR , 'jobs') #TODO: TO BE DEPRECATED
 SSH_PORT = 22                               #TODO: TO BE DEPRECATED

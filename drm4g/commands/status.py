@@ -27,7 +27,7 @@ Usage:
 Options:
    -d --debug    Debug mode.
 """
-from drm4g                import logger
+from drm4g                import console_logger
 from drm4g.commands       import Daemon, Agent
 
 def run( arg ) :
@@ -35,5 +35,5 @@ def run( arg ) :
         Daemon().status()
         Agent().status()
     except Exception as err :
-        logger.error( str( err ) )
+        console_logger.error( str( err ) )
 
