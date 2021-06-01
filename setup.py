@@ -27,6 +27,7 @@ import os
 import subprocess
 import glob
 import sys
+import stat
 
 #To ensure a script runs with a minimal version requirement of the Python interpreter
 #assert sys.version_info >= (2,5)
@@ -42,39 +43,23 @@ with open(os.path.join(here, 'README'), encoding='utf-8') as f:
 
 def build():
   current_path = os.getcwd()
-  
   if not os.path.exists(gridway_src) :
       raise Exception("The specified directory %s doesn't exist" % gridway_src)
   os.chdir( gridway_src )
-  
-  exit_code = subprocess.call('chmod +x ./configure && ./configure', shell=True)
-  if exit_code:
-    raise Exception("Configure failed - check config.log for more detailed information")
+  #to avoid re-run configure each time.
+  if(not os.path.isfile('config.log') or os.path.getmtime('config.log') <= os.path.getmtime('configure') ):
+    st = os.stat('configure')
+    os.chmod('configure', st.st_mode | stat.S_IEXEC)
+    exit_code = subprocess.call('./configure', shell=True)
+    if exit_code:
+      raise Exception("Configure failed - check config.log for more detailed information")
   
   exit_code = subprocess.call('make', shell=True)
   if exit_code:
     raise Exception("make failed")
   os.chdir( current_path )
 
-class build_ext_wrapper(build_ext):
-  def build_extensions(self):
-    build()
-    build_ext.build_extensions(self)
-
-class install_wrapper(install):
-  def run(self):
-    build()
-    install.run(self)
-
-class develop_wrapper(develop):
-  def run(self):
-    build()
-    develop.run(self)
-
-bin_scripts = glob.glob(os.path.join('bin', '*'))
-bin_scripts.append('LICENSE')
-
-data_files = ('bin',
+gw_files = ('bin',
     [
       'gridway-5.8/src/cmds/gwuser',
       'gridway-5.8/src/cmds/gwacct',
@@ -89,6 +74,32 @@ data_files = ('bin',
       'gridway-5.8/src/scheduler/gw_sched',
     ])
 
+#from pprint import pprint
+#pprint(vars(self))
+class build_ext_wrapper(build_ext):
+  def run(self):
+    build()
+    build_ext.run(self)
+
+class install_wrapper(install):
+  def run(self):
+    install.run(self)
+
+class develop_wrapper(develop):
+  def run(self):
+    develop.run(self)
+    for filename in gw_files[1]:
+      dst = os.path.join(self.script_dir, os.path.basename(filename))
+      if(os.path.lexists(dst)):
+        os.remove(dst)
+      src = os.path.abspath(filename)
+      os.symlink(src,dst)
+
+
+bin_scripts = glob.glob(os.path.join('bin', '*'))
+bin_scripts.append('LICENSE')
+
+# FROM: https://github.com/jbweston/miniver
 def get_version_and_cmdclass(package_name):
     import os
     from importlib.util import module_from_spec, spec_from_file_location
@@ -97,7 +108,6 @@ def get_version_and_cmdclass(package_name):
     module = module_from_spec(spec)
     spec.loader.exec_module(module)
     return module.__version__, module.cmdclass
-
 version, cmdclass = get_version_and_cmdclass('drm4g')
 
 setup(
@@ -105,11 +115,11 @@ setup(
   packages=find_packages(),
   include_package_data=True,
   package_data={'drm4g' : ['conf/*.conf', 'conf/job_template.default', 'conf/*.sh']},
-  data_files = [data_files],
+  data_files = [gw_files],
   version=version,
   author='Santander Meteorology Group (UC-CSIC)',
   author_email='antonio.cofino@unican.es',
-  url='https://meteo.unican.es/trac/wiki/DRM4G',
+  url='https://github.com/SantanderMetGroup/DRM4G',
   project_url = {
     'Documentation' : 'https://meteo.unican.es/trac/wiki/DRM4G'           ,
     'Source'        : 'https://github.com/SantanderMetGroup/DRM4G'        ,
