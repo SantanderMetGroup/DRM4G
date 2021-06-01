@@ -61,20 +61,20 @@ def build():
 
 gw_files = ('bin',
     [
-      'gridway-5.8/src/cmds/gwuser',
-      'gridway-5.8/src/cmds/gwacct',
-      'gridway-5.8/src/cmds/gwwait',
-      'gridway-5.8/src/cmds/gwhost',
-      'gridway-5.8/src/cmds/gwhistory',
-      'gridway-5.8/src/cmds/gwsubmit',
-      'gridway-5.8/src/cmds/gwps',
-      'gridway-5.8/src/cmds/gwkill',
-      'gridway-5.8/src/gwd/gwd',
-      'gridway-5.8/src/scheduler/gw_flood_scheduler',
-      'gridway-5.8/src/scheduler/gw_sched',
+     gridway_src + '/src/cmds/gwuser',
+     gridway_src + '/src/cmds/gwacct',
+     gridway_src + '/src/cmds/gwwait',
+     gridway_src + '/src/cmds/gwhost',
+     gridway_src + '/src/cmds/gwhistory',
+     gridway_src + '/src/cmds/gwsubmit',
+     gridway_src + '/src/cmds/gwps',
+     gridway_src + '/src/cmds/gwkill',
+     gridway_src + '/src/gwd/gwd',
+     gridway_src + '/src/scheduler/gw_flood_scheduler',
+     gridway_src + '/src/scheduler/gw_sched',
     ])
 
-#from pprint import pprint
+from pprint import pprint
 #pprint(vars(self))
 class build_ext_wrapper(build_ext):
   def run(self):
@@ -88,11 +88,16 @@ class install_wrapper(install):
 class develop_wrapper(develop):
   def run(self):
     develop.run(self)
+    pprint(vars(self))
     for filename in gw_files[1]:
       dst = os.path.join(self.script_dir, os.path.basename(filename))
       if(os.path.lexists(dst)):
+        if(self.verbose):
+          print("Removing %s" % dst)
         os.remove(dst)
       src = os.path.abspath(filename)
+      if(self.verbose):
+        print("Creating symlink: %s -> %s" % (dst, src))
       os.symlink(src,dst)
 
 
