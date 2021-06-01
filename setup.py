@@ -74,7 +74,7 @@ gw_files = ('bin',
      gridway_src + '/src/scheduler/gw_sched',
     ])
 
-#from pprint import pprint
+from pprint import pprint
 #pprint(vars(self))
 class build_ext_wrapper(build_ext):
   def run(self):
@@ -88,6 +88,7 @@ class install_wrapper(install):
 class develop_wrapper(develop):
   def run(self):
     develop.run(self)
+    pprint(vars(self))
     for filename in gw_files[1]:
       dst = os.path.join(self.script_dir, os.path.basename(filename))
       if(os.path.lexists(dst)):
