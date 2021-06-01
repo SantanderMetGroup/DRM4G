@@ -20,7 +20,10 @@
 
 __all__ = ["communicators", "core", "managers", "utils", "commands", "api"]
 
-__version__  = '2.6.15'
+from ._version import __version__
+del _version
+
+#__version__  = '2.6.15'
 __author__   = 'Valvanuz Fernández-Quiruelas, Markel Garcia, Carlos Blanco, Antonio Minondo and Antonio S. Cofino (@cofinoa)'
 
 import sys
@@ -36,7 +39,7 @@ if (sys.version_info[0]==2 and sys.version_info<=(2,5)) or (sys.version_info[0]=
 ##############################################
 # Default values used in DRM4G ENV variables #
 ##############################################
-HOME                 = expanduser(os.environ.get( '~' ))
+HOME                 = expanduser(os.environ.get( 'HOME', '~' ))
 DRM4G_DIR            = expanduser(os.environ.get( 'DRM4G_DIR'           , join( HOME     , '.drm4g' )))
 DRM4G_DIR_VAR        = expanduser(os.environ.get( 'DRM4G_DIR_VAR'       , join( DRM4G_DIR, 'var' )))
 DRM4G_DIR_ETC        = expanduser(os.environ.get( 'DRM4G_DIR_ETC'       , join( DRM4G_DIR, 'etc' )))

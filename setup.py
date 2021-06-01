@@ -27,7 +27,6 @@ import os
 import subprocess
 import glob
 import sys
-import drm4g
 
 #To ensure a script runs with a minimal version requirement of the Python interpreter
 #assert sys.version_info >= (2,5)
@@ -75,29 +74,52 @@ class develop_wrapper(develop):
 bin_scripts = glob.glob(os.path.join('bin', '*'))
 bin_scripts.append('LICENSE')
 
+data_files = ('bin',
+    [
+      'gridway-5.8/src/cmds/gwuser',
+      'gridway-5.8/src/cmds/gwacct',
+      'gridway-5.8/src/cmds/gwwait',
+      'gridway-5.8/src/cmds/gwhost',
+      'gridway-5.8/src/cmds/gwhistory',
+      'gridway-5.8/src/cmds/gwsubmit',
+      'gridway-5.8/src/cmds/gwps',
+      'gridway-5.8/src/cmds/gwkill',
+      'gridway-5.8/src/gwd/gwd',
+      'gridway-5.8/src/scheduler/gw_flood_scheduler',
+      'gridway-5.8/src/scheduler/gw_sched',
+    ])
+
+def get_version_and_cmdclass(package_name):
+    import os
+    from importlib.util import module_from_spec, spec_from_file_location
+    spec = spec_from_file_location('version',
+                                   os.path.join(package_name, '_version.py'))
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.__version__, module.cmdclass
+
+version, cmdclass = get_version_and_cmdclass('drm4g')
+
 setup(
   name='drm4g',
   packages=find_packages(),
   include_package_data=True,
   package_data={'drm4g' : ['conf/*.conf', 'conf/job_template.default', 'conf/*.sh']},
-  data_files=[('bin', [
-    'gridway-5.8/src/cmds/gwuser',
-    'gridway-5.8/src/cmds/gwacct',
-    'gridway-5.8/src/cmds/gwwait',
-    'gridway-5.8/src/cmds/gwhost',
-    'gridway-5.8/src/cmds/gwhistory',
-    'gridway-5.8/src/cmds/gwsubmit',
-    'gridway-5.8/src/cmds/gwps',
-    'gridway-5.8/src/cmds/gwkill',
-    'gridway-5.8/src/gwd/gwd',
-    'gridway-5.8/src/scheduler/gw_flood_scheduler',
-    'gridway-5.8/src/scheduler/gw_sched'])],
-  version=drm4g.__version__,
+  data_files = [data_files],
+  version=version,
   author='Santander Meteorology Group (UC-CSIC)',
   author_email='antonio.cofino@unican.es',
   url='https://meteo.unican.es/trac/wiki/DRM4G',
+  project_url = {
+    'Documentation' : 'https://meteo.unican.es/trac/wiki/DRM4G'           ,
+    'Source'        : 'https://github.com/SantanderMetGroup/DRM4G'        ,
+    'Tracker'       : 'https://github.com/SantanderMetGroup/DRM4G/issues' ,
+    'Download'      : 'https://pypi.org/project/drm4g/#files'             , 
+    'Twitter'       : 'https://twitter.com/SantanderMeteo'
+
+  },
   license='European Union Public License 1.1',
-  description='DRM4G is an open platform for DCIs.',
+  description='Meta-scheduling framework for distributed computing infrastructures',
   long_description=long_description,
   long_description_content_type='text/markdown',
   classifiers=[
@@ -120,5 +142,7 @@ setup(
     'build_ext' : build_ext_wrapper,
     'install'   : install_wrapper,
     'develop'   : develop_wrapper,
+    'sdist'     : cmdclass['sdist'],
+    'build_py'  : cmdclass['build_py'],
   },
 )
