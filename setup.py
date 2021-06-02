@@ -74,7 +74,7 @@ gw_files = ('bin',
       gridway_src + '/src/scheduler/gw_sched',
     ])
 
-from pprint import pprint
+#from pprint import pprint
 #pprint(vars(self))
 class build_ext_wrapper(build_ext):
   def run(self):
