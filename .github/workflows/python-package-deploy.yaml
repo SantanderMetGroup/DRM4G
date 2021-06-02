@@ -36,6 +36,7 @@ jobs:
 #        echo $CONDA/bin >> $GITHUB_PATH
       - run: conda install mamba
       - run: mamba install make c-compiler
+      - run: find . -exec touch -r ./configure -c {} \;
       - run: pip install .
 #    - name: Install dependencies
 #      run: |
