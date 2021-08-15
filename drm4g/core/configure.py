@@ -175,7 +175,7 @@ class Configuration(object):
                 output = "'host_filter' key is only available for 'cream' lrms"
                 logger.error( output )
                 errors.append( output )
-            if not _exist_manager(COMMUNICATORS, resdict[ 'communicator' ] ):
+            if not self._exist_manager(COMMUNICATORS, resdict[ 'communicator' ] ):
                 output = "'%s' has a wrong communicator: '%s'" % (resname , resdict[ 'communicator' ] )
                 logger.error( output )
                 errors.append( output )
@@ -183,7 +183,7 @@ class Configuration(object):
                 output = "'username' key is mandatory for '%s' communicator, '%s' resource" % (resdict[ 'communicator' ], resname)
                 logger.error( output )
                 errors.append( output )
-            if not _exist_manager(RESOURCE_MANAGERS, resdict[ 'lrms' ] ):
+            if not self._exist_manager(RESOURCE_MANAGERS, resdict[ 'lrms' ] ):
                 output = "'%s' has a wrong lrms: '%s'" % ( resname , resdict[ 'lrms' ] )
                 logger.error( output )
                 errors.append( output )
@@ -278,12 +278,12 @@ class Configuration(object):
                 logger.warning( output , exc_info=1 )
         return resources
     
-    def _import_manager(MANAGERS, manager):
+    def _import_manager(self, MANAGERS, manager):
         """
         Auxiliar function to return module imported from MANAGERS, been referencied by manager.
         """
         if manager in MANAGERS :
-            output = "Importing manager '%s' from '%s'" % ( manager , MANAGERS[ manager ]
+            output = "Importing manager '%s' from '%s'" % ( manager , MANAGERS[ manager ] )
             logger.debug( output )
             return import_module(MANAGERS[ manager ] )
         else :
@@ -291,9 +291,9 @@ class Configuration(object):
             logger.debug( output )
             return import_module( manager )
     
-    def _manager_exist(MANAGERS, manager):
+    def _exist_manager(self, MANAGERS, manager):
         try:
-            _import_manager(MANAGERS, manager)
+            self._import_manager(MANAGERS, manager)
         except ImportError:
             return False
         else:
