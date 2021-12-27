@@ -22,7 +22,7 @@
 """
 DRM4G is an open platform, which is based on GridWay Metascheduler, to define,
 submit, and manage computational jobs. For additional information,
-see http://meteo.unican.es/trac/wiki/DRM4G .
+see https://github.com/SantanderMetGroup/DRM4G/wiki .
 
 Usage: drm4g [ --version ] [ --help ]
              <command> [ options ] [ <args>... ]

@@ -197,7 +197,7 @@ setup(
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
   ],
-  install_requires=['fabric', 'docopt', 'openssh-wrapper','scp'],
+  install_requires=['paramiko>=2.4', 'fabric', 'docopt', 'openssh-wrapper','scp'],
   scripts=bin_scripts,
   cmdclass={
     'build_ext' : build_ext_wrapper,
