@@ -19,23 +19,26 @@
 # permissions and limitations under the Licence.
 #
 
+import sys
+import traceback
+from argparse import ArgumentParser
+
 from drm4g.core.tm_mad import GwTmMad
-from optparse import OptionParser
-import sys, traceback
 
 def main():
-    parser = OptionParser(description = 'Transfer manager MAD',
-            prog = 'gw_tm_mad_drm4g.py', version = '0.1',
-            usage = 'Usage: %prog')
+    parser = ArgumentParser(
+               description = 'Transfer manager MAD',
+               usage       = 'Usage: %(prog)s'
+            )
+    parser.add_argument('--version', action='version', version='%(prog)s 0.1')
     options, args = parser.parse_args()
     try:
         GwTmMad().processLine()
-    except KeyboardInterrupt as e:
+    except KeyboardInterrupt:
         sys.exit(-1)
     except Exception as e:
         traceback.print_exc(file=sys.stdout)
-        exit( 'Caught exception: %s: %s' % (e.__class__, str(e)) )
-
+        sys.exit( 'Caught exception: %s: %s' % (e.__class__, str(e)) )
 
 if __name__ == '__main__':
     main()

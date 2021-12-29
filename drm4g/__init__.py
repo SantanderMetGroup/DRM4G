@@ -31,8 +31,7 @@ from ._version import __version__
 
 __author__   = 'Valvanuz Fernández-Quiruelas, Markel Garcia, Carlos Blanco, Antonio Minondo and Antonio S. Cofino (@cofinoa)'
 
-if sys.version_info<(3,5):
-    sys.exit( 'The version number of Python has to be >= 3.5' )
+assert sys.version_info >= (3, 5), "The version number of Python has to be >= 3.5"
 
 ##############################################
 # Default values used in DRM4G ENV variables #
