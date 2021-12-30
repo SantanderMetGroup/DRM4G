@@ -521,4 +521,3 @@ class Proxy( object ):
         console_logger.info( out )
         if err :
             console_logger.info( err )
-

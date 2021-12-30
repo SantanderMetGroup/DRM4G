@@ -81,7 +81,7 @@ if __name__ == "__main__":
     cmd_name = args['<command>']
     argv = [ cmd_name ] + args[ '<args>' ]
     if cmd_name in commands_list :
-        command = getattr( importlib.import_module( "drm4g.commands.%s" %  cmd_name ).commands, cmd_name )
+        command = getattr( __import__( "drm4g.commands.%s" %  cmd_name ).commands, cmd_name )
         arg = docopt( command.__doc__ , argv = argv )
         if arg[ '--debug' ] :
             command.console_logger.setLevel(logging.DEBUG)
