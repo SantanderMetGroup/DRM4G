@@ -38,10 +38,6 @@ assert sys.version_info >= (3, 5), "The version number of Python has to be >= 3.
 here = os.path.abspath(os.path.dirname(__file__))
 gridway_src = "gridway-5.8"
   
-# read the contents of your README file
-with open(os.path.join(here, 'README'), encoding='utf-8') as f:
-    long_description = f.read()
-
 MAKE_CLEAN = False
 def build():
     current_path = os.getcwd()
@@ -93,23 +89,6 @@ gw_files = ('bin',
       gridway_src + '/build/bin/gw_sched',
     ])
 
-#OLD WAY
-#gw_files = ('bin',
-#    [
-#      gridway_src + '/src/cmds/gwuser',
-#      gridway_src + '/src/cmds/gwacct',
-#      gridway_src + '/src/cmds/gwwait',
-#      gridway_src + '/src/cmds/gwhost',
-#      gridway_src + '/src/cmds/gwhistory',
-#      gridway_src + '/src/cmds/gwsubmit',
-#      gridway_src + '/src/cmds/gwps',
-#      gridway_src + '/src/cmds/gwkill',
-#      gridway_src + '/src/gwd/gwd',
-#      gridway_src + '/src/scheduler/gw_flood_scheduler',
-#      gridway_src + '/src/scheduler/gw_sched',
-#    ])
-
-#pprint(vars(self))
 class build_ext_wrapper(build_ext):
     def run(self):
         print("[running build_ext_wrapper.run() ...]")
@@ -144,9 +123,7 @@ class develop_wrapper(develop):
                     print("[creating symlink: %s -> %s]" % (dst, src))
                 os.symlink(src,dst)
 
-
 bin_scripts = glob.glob(os.path.join('bin', '*'))
-#bin_scripts.append('LICENSE')
 
 # FROM: https://github.com/jbweston/miniver
 def get_version_and_cmdclass(package_name):
@@ -158,6 +135,10 @@ def get_version_and_cmdclass(package_name):
     spec.loader.exec_module(module)
     return module.__version__, module.cmdclass
 version, cmdclass = get_version_and_cmdclass('drm4g')
+
+# read the contents of your README file
+with open(os.path.join(here, 'README'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='drm4g',
