@@ -32,6 +32,7 @@ from drm4g             import REMOTE_VOS_DIR, DRM4G_RESOURCES_CONF, console_logg
 from drm4g.core.im_mad import GwImMad
 from os.path           import expanduser, join, dirname, exists, basename, expandvars
 
+
 def process_is_runnig( pid ):
     """
     Check is a process is running given a file
@@ -61,7 +62,7 @@ def exec_cmd( cmd , stdin=subprocess.PIPE, stdout=subprocess.PIPE,
     out , err =  cmd_to_exec.communicate()
     return out.decode() , err.decode()
 
-def yes_no_choice( message ,  default = 'y' ) :
+def yes_no_choice( message ,  default = 'n' ) :
     """
     Ask for Yes/No questions
     """
@@ -376,7 +377,7 @@ class Resource( object ):
         Edit resources file.
         """
         console_logger.debug( "Editing '%s' file", DRM4G_RESOURCES_CONF )
-        os.system( "%s %s",  os.environ.get('EDITOR', 'nano') , DRM4G_RESOURCES_CONF )
+        os.system( "%s %s" % ( os.environ.get('EDITOR', 'vi') , DRM4G_RESOURCES_CONF ))
         self.check( )
 
     def list( self ) :
