@@ -62,7 +62,7 @@ def exec_cmd( cmd , stdin=subprocess.PIPE, stdout=subprocess.PIPE,
     out , err =  cmd_to_exec.communicate()
     return out.decode() , err.decode()
 
-def yes_no_choice( message ,  default = 'y' ) :
+def yes_no_choice( message ,  default = 'n' ) :
     """
     Ask for Yes/No questions
     """
